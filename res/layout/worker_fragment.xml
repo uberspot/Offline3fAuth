@@ -8,6 +8,7 @@
     tools:context=".MainActivity$DummySectionFragment" >
 
     <LinearLayout
+        android:id="@+id/faceRecLayout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -17,29 +18,30 @@
         android:padding="7dp" >
          <TextView
 	        android:id="@+id/faceRecTextView"
-	        style="?android:attr/textAppearanceLarge"
+	        style="?android:attr/textAppearanceMedium"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:padding="10dp"
-	        android:text="FaceRec"
+	        android:text="@string/face_recognition"
 	        android:textIsSelectable="true" />
          <Button
 	        android:id="@+id/faceRecButton"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:gravity="center_vertical|center_horizontal"
-	        android:text="facebutton"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp" />
+	        android:text="@string/scan_face"
+	        style="@style/ButtonText"
+	        android:background="@drawable/btn_black" />
          <ImageView
 		        android:id="@+id/faceRecView"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
-				android:contentDescription="asfas"
+				android:contentDescription="@string/scanned_face"
 				android:padding="10dp" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/codeLayout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -48,31 +50,34 @@
         android:padding="7dp" >
          <TextView
 	        android:id="@+id/codeTextView"
-	        style="?android:attr/textAppearanceLarge"
+	        style="?android:attr/textAppearanceMedium"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:padding="10dp"
-	        android:text="Code"
+	        android:text="@string/password"
 	        android:textIsSelectable="true" />
          <EditText
             android:id="@+id/codeInput"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="enter code here"
+            android:hint="@string/password"
+            style="?android:attr/textAppearanceSmall"
             android:imeOptions="actionSearch"
             android:inputType="textPassword" >
         </EditText>
         <EditText
             android:id="@+id/codeInputValidate"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="validate code"
+            android:hint="@string/validate_pass"
+            style="?android:attr/textAppearanceSmall"
             android:imeOptions="actionSearch"
             android:inputType="textPassword" >
         </EditText>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/qrCodeLayout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -82,25 +87,25 @@
         android:padding="7dp" >
          <TextView
 	        android:id="@+id/qrCodeTextView"
-	        style="?android:attr/textAppearanceLarge"
+	        style="?android:attr/textAppearanceMedium"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:padding="10dp"
-	        android:text="QRCode"
+	        android:text="@string/qrcode"
 	        android:textIsSelectable="true" />
          <Button
 	        android:id="@+id/qrCodeButton"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:gravity="center_vertical|center_horizontal"
-	        android:text="qrbutton"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp" />
+	        android:text="@string/scan_qrcode"
+	        style="@style/ButtonText"
+	        android:background="@drawable/btn_black" />
          <ImageView
 		        android:id="@+id/qrCodeView"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
-				android:contentDescription="sadasd"
+				android:contentDescription="@string/resulting_qrcode"
 				android:padding="10dp" />
     </LinearLayout>
 

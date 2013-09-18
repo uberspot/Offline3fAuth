@@ -5,5 +5,13 @@
     <string name="action_settings">Settings</string>
     <string name="authenticate_account">Authenticate Account</string>
     <string name="register_account">Register Account</string>
- 
+ 	<string name="face_recognition">Face recognition</string>
+ 	<string name="scan_face">Scan face</string>
+ 	<string name="scanned_face">Scanned face</string>
+ 	<string name="password">Password</string>
+ 	<string name="validate_pass">Validate pass</string>
+ 	<string name="qrcode">QRCode</string>
+ 	<string name="scan_qrcode">Scan QRCode</string>
+ 	<string name="resulting_qrcode">Resulting QRCode</string>
+ 	
 </resources>

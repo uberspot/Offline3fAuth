@@ -1,18 +1,35 @@
 package com.ofa.offline3fauth;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class RegisterFragment extends Fragment {
+public class RegisterFragment extends TabFragment {
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.worker_fragment,
-				container, false);
+		View superView = super.onCreateView(inflater, container, savedInstanceState);
 		
-		return rootView;
+		// Do whatever change to the UI you want
+		qrCodeButton.setVisibility(View.GONE);
+		
+		return superView;
+	}
+
+	@Override
+	protected void onQRCodeButtonClicked() {
+		
+	}
+
+	@Override
+	protected void onFaceRecButtonClicked() {
+		
+	}
+
+	@Override
+	protected void processCode() {
+		
 	}
 }

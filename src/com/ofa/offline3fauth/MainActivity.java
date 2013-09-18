@@ -2,6 +2,7 @@ package com.ofa.offline3fauth;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -55,15 +56,28 @@ public class MainActivity extends FragmentActivity implements
 						actionBar.setSelectedNavigationItem(position);
 					}
 				});
-
+		
 		//Add the tabs
-		actionBar.addTab(actionBar.newTab()
+		actionBar.addTab(actionBar.newTab().setTag(getString(R.string.authenticate_account))
 				.setText(getString(R.string.authenticate_account))
 				.setTabListener(this));
-		actionBar.addTab(actionBar.newTab()
+		actionBar.addTab(actionBar.newTab().setTag(getString(R.string.register_account))
 				.setText(getString(R.string.register_account))
 				.setTabListener(this));
 	
+	}
+	
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    	//Forward the qrcode scan result to the corresponding CIFFragment
+		if (resultCode == RESULT_OK) {
+			findFragmentByPosition(mViewPager.getCurrentItem()).onActivityResult(requestCode, resultCode, intent);
+		}
+	}
+	
+	public Fragment findFragmentByPosition(int position) {
+	    return getSupportFragmentManager().findFragmentByTag(
+	            "android:switcher:" + mViewPager.getId() + ":"
+	                    + mSectionsPagerAdapter.getItemId(position));
 	}
 
 	@Override
