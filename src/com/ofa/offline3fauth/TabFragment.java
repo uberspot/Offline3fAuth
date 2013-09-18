@@ -113,8 +113,9 @@ public abstract class TabFragment extends Fragment {
 	
 	protected static void fillImageViewWithQRCode(ImageView imageView, String textToEncode) {
 		try {
-    	    Bitmap bm = QRCodeEncoder.encodeAsBitmap(textToEncode, BarcodeFormat.QR_CODE, 220, 220);
+    	    Bitmap bm = QRCodeEncoder.encodeAsBitmap(textToEncode, BarcodeFormat.QR_CODE, 250, 250);
     	    if(bm != null) {
+    	    	//TODO: cache this internally
     	    	imageView.setImageBitmap(bm);
     	    }
     	} catch (WriterException e) { e.printStackTrace(); }

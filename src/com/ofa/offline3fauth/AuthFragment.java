@@ -41,6 +41,7 @@ public class AuthFragment extends TabFragment {
 		  IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 		  if (scanResult != null && scanResult.getContents()!=null) {
 			 // Use qrcode string : scanResult.getContents() 
+			  fillImageViewWithQRCode(qrCodeView, scanResult.getContents());
 		  }
 	}
 }
