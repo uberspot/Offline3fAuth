@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Offline3FAuth</string>
+    <string name="action_settings">Settings</string>
+    <string name="authenticate_account">Authenticate Account</string>
+    <string name="register_account">Register Account</string>
+ 
+</resources>
