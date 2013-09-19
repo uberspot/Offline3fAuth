@@ -1,11 +1,21 @@
 package com.ofa.offline3fauth;
 
+import java.util.List;
+
+import utils.ObjCacher;
+import utils.QRCodeEncoder;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,6 +36,7 @@ public abstract class TabFragment extends Fragment {
 	protected Button faceRecButton, qrCodeButton;
 	protected ImageView faceRecView, qrCodeView;
 	protected EditText codeInput, codeInputValidate;
+	protected final static int CAMREQ_CODE = 12221;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,6 +106,18 @@ public abstract class TabFragment extends Fragment {
   		    }
   		});
 		
+		if(ObjCacher.hasLastFaceBitmap()) {
+			faceRecView.setImageBitmap(ObjCacher.lastFaceBitmap);
+		}
+		if(ObjCacher.hasLastPassword()) {
+			codeInput.setText(ObjCacher.lastPassword);
+			codeInputValidate.setText(ObjCacher.lastPassword);
+		}
+		if(ObjCacher.hasLastQRScanned()) {
+			fillImageViewWithQRCode(qrCodeView, ObjCacher.lastQRScanned);
+		}
+		
+		// validateAllFactors();
 		return rootView;
 	}
 	
@@ -105,19 +128,43 @@ public abstract class TabFragment extends Fragment {
         }
     }
 	
-	protected abstract void onQRCodeButtonClicked();
+	protected void onQRCodeButtonClicked() {
+		IntentIntegrator integrator = new IntentIntegrator(getActivity());
+    	integrator.initiateScan();
+	}
 
-	protected abstract void onFaceRecButtonClicked();
+	protected void onFaceRecButtonClicked() {
+		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		
+		PackageManager packageManager = getActivity().getApplicationContext().getPackageManager();
+	    List<ResolveInfo> list =
+	            packageManager.queryIntentActivities(takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
+	    if(list.size() > 0) {
+	    	getActivity().startActivityForResult(takePictureIntent, CAMREQ_CODE);
+	    }
+	}
 
-	protected abstract void processCode();
+	protected void processCode() {
+		String codeIn = codeInput.getText().toString().trim();
+		String codeInVal = codeInputValidate.getText().toString().trim();
+		if(codeIn==null || "".equals(codeIn) || codeInVal==null || "".equals(codeInVal)) {
+			// notify user that one is empty
+		} else if(!codeIn.equals(codeInVal)) {
+			// notify user that they don't match
+		} else {
+			ObjCacher.lastPassword = codeIn;
+			validateAllFactors();
+		}
+	}
 	
 	protected static void fillImageViewWithQRCode(ImageView imageView, String textToEncode) {
 		try {
     	    Bitmap bm = QRCodeEncoder.encodeAsBitmap(textToEncode, BarcodeFormat.QR_CODE, 250, 250);
     	    if(bm != null) {
-    	    	//TODO: cache this internally
     	    	imageView.setImageBitmap(bm);
     	    }
     	} catch (WriterException e) { e.printStackTrace(); }
 	}
+	
+	protected abstract boolean validateAllFactors();
 }

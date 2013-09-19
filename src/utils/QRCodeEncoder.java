@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ofa.offline3fauth;
+package utils;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -30,11 +30,11 @@ import java.util.Hashtable;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-final class QRCodeEncoder {
+public final class QRCodeEncoder {
 
   private static final int WHITE = 0xFFFFFFFF;
   private static final int BLACK = 0xFF000000;
-	static Bitmap encodeAsBitmap(String contents, BarcodeFormat format,
+	public static Bitmap encodeAsBitmap(String contents, BarcodeFormat format,
 			int desiredWidth, int desiredHeight) throws WriterException {
 		Hashtable<EncodeHintType, String> hints = null;
 		String encoding = guessAppropriateEncoding(contents);

@@ -1,5 +1,9 @@
 package com.ofa.offline3fauth;
 
+import utils.ObjCacher;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,19 +21,26 @@ public class RegisterFragment extends TabFragment {
 		
 		return superView;
 	}
-
-	@Override
-	protected void onQRCodeButtonClicked() {
-		
+	
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		  if(requestCode == CAMREQ_CODE && resultCode == Activity.RESULT_OK) {
+				Bundle extras = intent.getExtras();
+				Bitmap picture = (Bitmap) extras.get("data");
+				ObjCacher.lastFaceBitmap = picture;
+				faceRecView.setImageBitmap(picture);
+				validateAllFactors();
+		  }
 	}
 
 	@Override
-	protected void onFaceRecButtonClicked() {
-		
+	protected boolean validateAllFactors() {
+		if(!ObjCacher.hasLastFaceBitmap() || !ObjCacher.hasLastPassword() || 
+				!ObjCacher.hasLastQRScanned())
+			return false;
+		// Else process ObjCacher.lastFaceBitmap , ObjCacher.lastQRScanned and ObjCacher.lastPassword
+		// and do something with the result
+		return true;
 	}
-
-	@Override
-	protected void processCode() {
-		
-	}
+	
+	
 }

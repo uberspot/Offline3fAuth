@@ -68,7 +68,7 @@ public class MainActivity extends FragmentActivity implements
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-    	//Forward the qrcode scan result to the corresponding CIFFragment
+    	//Forward the result to the corresponding Fragment
 		if (resultCode == RESULT_OK) {
 			findFragmentByPosition(mViewPager.getCurrentItem()).onActivityResult(requestCode, resultCode, intent);
 		}
