@@ -5,10 +5,10 @@ import java.util.List;
 
 import utils.LocalBinaryPattern;
 import utils.ObjCacher;
+import utils.ObjCompressor;
 import utils.ObjCrypter;
 import utils.QRCodeEncoder;
 import utils.SkinFaceDetector;
-import utils.StringCompressor;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -174,29 +174,46 @@ public abstract class TabFragment extends Fragment {
 	
 	protected abstract boolean validateAllFactors();
 	
-	protected String deProcessFactors(String processedString, String password) {
-		return StringCompressor.decompress(
-				ObjCrypter.decrypt3DES(
-						Base64.decode( processedString.getBytes(), Base64.NO_WRAP)
-									  , password));
+	protected ArrayList<ArrayList<Integer>> deProcessFactors(String processedString, String password) {
+		try {
+			return ObjCompressor.decompress(
+											ObjCrypter.decrypt3DES(
+													Base64.decode( 
+															processedString.getBytes("ISO-8859-1")
+															, Base64.NO_WRAP)
+													, password));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ArrayList<ArrayList<Integer>>();
 	}
 	
-	protected String processFactors(String faceDescriptor, String password) {
-		return new String(Base64.encode(
-				ObjCrypter.encrypt3DES(
-						StringCompressor.compress(faceDescriptor), password)
-									  , Base64.NO_WRAP));
+	protected String processFactors(ArrayList<ArrayList<Integer>> faceDescriptor, String password) {
+		try { 
+			return new String(Base64.encode(
+									ObjCrypter.encrypt3DES(
+												ObjCompressor.compress(faceDescriptor)
+											, password)
+							  , Base64.NO_WRAP)
+					, "ISO-8859-1");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 	protected String generateQRCodeText(Bitmap faceBitmap, String password) {
-		LocalBinaryPattern lbp = new LocalBinaryPattern(new SkinFaceDetector(), 0.5, 0.5);
+		ArrayList<ArrayList<Integer>> faceDes = getFaceDescriptor(faceBitmap);
 		String compressed = "";
-		ArrayList<ArrayList<Integer>> col = lbp.getDescriptor(faceBitmap);
-		if(col!=null && col.size()!=0) {
-			compressed = processFactors(col.toString(), password);
-			System.out.println("Text: " + col.toString());
+		if(faceDes!=null && faceDes.size()!=0) {
+			compressed = processFactors(faceDes, password);
 			System.out.println("Compressed text: " + compressed);
 		}
 		return compressed;
+	}
+	
+	protected ArrayList<ArrayList<Integer>> getFaceDescriptor(Bitmap faceBitmap) {
+		LocalBinaryPattern lbp = new LocalBinaryPattern(new SkinFaceDetector(), 0.5, 0.5);
+		return lbp.getDescriptor(faceBitmap);
 	}
 }

@@ -193,11 +193,11 @@ public class LocalBinaryPattern {
 		return list;
 	}
 
-	public double distance(Collection<Double> c1, Collection<Double> c2) {
+	public static double distance(Collection<Double> c1, Collection<Double> c2) {
 		return MathUtils.chiSquareDistance(c1, c2);
 	}
 	
-	public Collection<Double> ArrayListToCollection(ArrayList<ArrayList<Integer>> arrayLists) {
+	public static Collection<Double> ArrayListToCollection(ArrayList<ArrayList<Integer>> arrayLists) {
 		LinkedList<Double> list = new LinkedList<Double>();
 		for(ArrayList<Integer> subArrayList: arrayLists) {
 			for (int i = 0; i < subArrayList.size()-1; i++) {

@@ -16,10 +16,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class RegisterFragment extends TabFragment {
 	
@@ -59,6 +59,7 @@ public class RegisterFragment extends TabFragment {
 				qrBitmap = QRCodeEncoder.encodeAsBitmap(compressed, BarcodeFormat.QR_CODE, 400, 400);
 			if (qrBitmap != null) {
 				qrCodeView.setImageBitmap(qrBitmap);
+				ObjCacher.lastQRCreated = qrBitmap;
 			}
 		} catch (WriterException e) {
 			e.printStackTrace();
@@ -68,29 +69,26 @@ public class RegisterFragment extends TabFragment {
 		qrCodeButton.setText(getString(R.string.save));
 		qrCodeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	//saveQRCode();
-            	Bitmap qr = qrCodeView.getDrawingCache();
             	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.US);
             	String qrName = dateFormat.format(new Date());
-            	MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), qr,
-            			qrName + ".jpg Card Image", qrName + ".jpg Card Image");
+            	saveQRCode("/offline3fauth", qrName);
             }
         }); 
 		return true;
 	}
 
-	private void saveQRCode() {
-		Bitmap qr = qrCodeView.getDrawingCache();
+	private void saveQRCode(String directory, String fileName) {
 		try {
 			File dir = new File(Environment
 					.getExternalStorageDirectory().getAbsolutePath()
-					+ "/o3ftest");
+					+ directory);
 			if (!dir.exists())
 				dir.mkdirs();
-			File file = new File(dir, "image.png");
+			File file = new File(dir, fileName + ".png");
 			FileOutputStream out = new FileOutputStream(file);
-			qr.compress(Bitmap.CompressFormat.PNG, 90, out);
+			ObjCacher.lastQRCreated.compress(Bitmap.CompressFormat.PNG, 90, out);
 			out.close();
+			Toast.makeText(getActivity(), "QRCode saved to " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

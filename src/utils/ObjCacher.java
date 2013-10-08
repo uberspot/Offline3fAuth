@@ -10,7 +10,7 @@ public class ObjCacher {
 	public static String lastQRScanned = null;
 	public static Bitmap lastFaceBitmap = null;
 	public static String lastPassword = null;
-	public static ArrayList<ArrayList<Integer>> lastFaceArray = null;
+	public static Bitmap lastQRCreated = null;
 	
 	public static boolean hasLastQRScanned() {
 		return lastQRScanned !=null;
@@ -24,7 +24,7 @@ public class ObjCacher {
 		return lastPassword!=null;
 	}
 
-	public static boolean hasLastFaceArray() {
-		return lastFaceArray!=null;
+	public static boolean hasLastQRCreated() {
+		return lastQRCreated!=null;
 	}
 }
