@@ -1,9 +1,14 @@
 package com.ofa.offline3fauth;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import utils.LocalBinaryPattern;
 import utils.ObjCacher;
+import utils.ObjCrypter;
 import utils.QRCodeEncoder;
+import utils.SkinFaceDetector;
+import utils.StringCompressor;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -19,6 +24,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -167,4 +173,30 @@ public abstract class TabFragment extends Fragment {
 	}
 	
 	protected abstract boolean validateAllFactors();
+	
+	protected String deProcessFactors(String processedString, String password) {
+		return StringCompressor.decompress(
+				ObjCrypter.decrypt3DES(
+						Base64.decode( processedString.getBytes(), Base64.NO_WRAP)
+									  , password));
+	}
+	
+	protected String processFactors(String faceDescriptor, String password) {
+		return new String(Base64.encode(
+				ObjCrypter.encrypt3DES(
+						StringCompressor.compress(faceDescriptor), password)
+									  , Base64.NO_WRAP));
+	}
+	
+	protected String generateQRCodeText(Bitmap faceBitmap, String password) {
+		LocalBinaryPattern lbp = new LocalBinaryPattern(new SkinFaceDetector(), 0.5, 0.5);
+		String compressed = "";
+		ArrayList<ArrayList<Integer>> col = lbp.getDescriptor(faceBitmap);
+		if(col!=null && col.size()!=0) {
+			compressed = processFactors(col.toString(), password);
+			System.out.println("Text: " + col.toString());
+			System.out.println("Compressed text: " + compressed);
+		}
+		return compressed;
+	}
 }

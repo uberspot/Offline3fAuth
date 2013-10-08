@@ -11,6 +11,7 @@
  	<string name="password">Password</string>
  	<string name="validate_pass">Validate pass</string>
  	<string name="qrcode">QRCode</string>
+ 	<string name="save">Save</string>
  	<string name="scan_qrcode">Scan QRCode</string>
  	<string name="resulting_qrcode">Resulting QRCode</string>
  	
