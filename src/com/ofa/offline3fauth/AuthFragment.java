@@ -54,14 +54,16 @@ public class AuthFragment extends TabFragment {
 			return false;
 		// Else process ObjCacher.lastFaceBitmap , ObjCacher.lastQRScanned and
 		// ObjCacher.lastPassword
-		System.out.println("Decompressed text: " + ObjCacher.lastQRScanned);
+		
+		System.out.println("Scanned QR Text: " + ObjCacher.lastQRScanned);
 		ArrayList<ArrayList<Integer>> faceDes = getFaceDescriptor(ObjCacher.lastFaceBitmap);
 		ArrayList<ArrayList<Integer>> scannedFaceDes= deProcessFactors(ObjCacher.lastQRScanned, ObjCacher.lastPassword);
-		System.out.println("ScannedFaceDes: " + scannedFaceDes);
+		System.out.println("Decompressed FaceDescriptor: " + scannedFaceDes);
 		
 		Double distance = LocalBinaryPattern.distance(LocalBinaryPattern.ArrayListToCollection(scannedFaceDes),
 													  LocalBinaryPattern.ArrayListToCollection(faceDes));
 		System.out.println("Distance: " + distance);
+		
 		return true;
 	}
 }

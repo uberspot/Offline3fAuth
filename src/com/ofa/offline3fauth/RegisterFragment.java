@@ -52,6 +52,7 @@ public class RegisterFragment extends TabFragment {
 		// and do something with the result
 		
 		//Generate QRCode and add button to save it
+		
 		String compressed = generateQRCodeText(ObjCacher.lastFaceBitmap, ObjCacher.lastPassword);
 		Bitmap qrBitmap = null;
 		try {
@@ -93,6 +94,4 @@ public class RegisterFragment extends TabFragment {
 			e.printStackTrace();
 		}
 	}
-	
-	
 }

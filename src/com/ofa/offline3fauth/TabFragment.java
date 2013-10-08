@@ -1,5 +1,9 @@
 package com.ofa.offline3fauth;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -207,7 +212,8 @@ public abstract class TabFragment extends Fragment {
 		String compressed = "";
 		if(faceDes!=null && faceDes.size()!=0) {
 			compressed = processFactors(faceDes, password);
-			System.out.println("Compressed text: " + compressed);
+			System.out.println("Last Face Descriptor: " + faceDes);
+			System.out.println("Encrypted QR Text: " + compressed);
 		}
 		return compressed;
 	}
@@ -215,5 +221,29 @@ public abstract class TabFragment extends Fragment {
 	protected ArrayList<ArrayList<Integer>> getFaceDescriptor(Bitmap faceBitmap) {
 		LocalBinaryPattern lbp = new LocalBinaryPattern(new SkinFaceDetector(), 0.5, 0.5);
 		return lbp.getDescriptor(faceBitmap);
+	}
+	
+	protected boolean saveStringToStorage(String obj, String directory, String fileName) {
+		if(!directory.startsWith(File.separator))
+			directory = File.separator + directory;
+
+		File dir = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + directory);
+		if(!dir.exists()) dir.mkdirs();
+		
+		File file = new File(dir, fileName);
+		
+		BufferedOutputStream output = null;
+		try {
+			output = new BufferedOutputStream( new FileOutputStream(file) );
+			output.write(obj.getBytes());
+			output.flush();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(output!=null)
+				try { output.close(); } catch (IOException e) { }
+		}
+		return false;
 	}
 }
