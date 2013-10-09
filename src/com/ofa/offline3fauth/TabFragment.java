@@ -4,11 +4,11 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
 import utils.LocalBinaryPattern;
-import utils.ObjCacher;
 import utils.ObjCompressor;
 import utils.ObjCrypter;
 import utils.QRCodeEncoder;
@@ -24,7 +24,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -43,6 +42,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 public abstract class TabFragment extends Fragment {
@@ -124,21 +124,12 @@ public abstract class TabFragment extends Fragment {
   		    }
   		});
 		
-		if(ObjCacher.hasLastFaceBitmap()) {
-			faceRecView.setImageBitmap(ObjCacher.lastFaceBitmap);
-		}
-		if(ObjCacher.hasLastPassword()) {
-			codeInput.setText(ObjCacher.lastPassword);
-			codeInputValidate.setText(ObjCacher.lastPassword);
-		}
-		if(ObjCacher.hasLastQRScanned()) {
-			fillImageViewWithQRCode(qrCodeView, ObjCacher.lastQRScanned);
-		}
-		
-		// validateAllFactors();
+		displayAcceptedInputs();
 		return rootView;
 	}
 	
+	protected abstract void displayAcceptedInputs();
+
 	public void hideSoftKeyboard(EditText input){
         if(getActivity().getCurrentFocus()!=null && getActivity().getCurrentFocus() instanceof EditText){
             InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -170,11 +161,13 @@ public abstract class TabFragment extends Fragment {
 		} else if(!codeIn.equals(codeInVal)) {
 			// notify user that they don't match
 		} else {
-			ObjCacher.lastPassword = codeIn;
+			setPassword(codeIn);
 			validateAllFactors();
 		}
 	}
 	
+	protected abstract void setPassword(String codeIn);
+
 	protected static void fillImageViewWithQRCode(ImageView imageView, String textToEncode) {
 		try {
     	    Bitmap bm = QRCodeEncoder.encodeAsBitmap(textToEncode, BarcodeFormat.QR_CODE, 250, 250);
@@ -187,16 +180,20 @@ public abstract class TabFragment extends Fragment {
 	protected abstract boolean validateAllFactors();
 	
 	protected ArrayList<ArrayList<Integer>> deProcessFactors(String processedString, String password) {
-		try {
-			return ObjCompressor.decompress(
-											ObjCrypter.decrypt3DES(
-													Base64.decode( 
-															processedString.getBytes("ISO-8859-1")
-															, Base64.NO_WRAP)
-													, password));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			try {
+				return ObjCompressor.decompress(
+												ObjCrypter.decrypt3DES(
+														Base64.decode( 
+																processedString.getBytes("ISO-8859-1")
+																, Base64.NO_WRAP)
+														, password));
+			} catch (GeneralSecurityException e) {
+				Toast.makeText(getActivity(), "Error in decrypting. Password may be incorrect.", Toast.LENGTH_SHORT).show();
+			} catch (IOException e) {
+				Toast.makeText(getActivity(), "Error in processing. Try to scan QRCode again.", Toast.LENGTH_SHORT).show();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		return new ArrayList<ArrayList<Integer>>();
 	}
 	
@@ -208,6 +205,10 @@ public abstract class TabFragment extends Fragment {
 											, password)
 							  , Base64.NO_WRAP)
 					, "ISO-8859-1");
+		} catch (GeneralSecurityException e) {
+			Toast.makeText(getActivity(), "Error in encrypting. Password may be incorrect.", Toast.LENGTH_SHORT).show();
+		} catch (IOException e) {
+			Toast.makeText(getActivity(), "Error in processing. Try again.", Toast.LENGTH_SHORT).show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -261,18 +262,5 @@ public abstract class TabFragment extends Fragment {
 	    setLayoutColors();
 	}
 	
-	protected void setLayoutColors() {
-		if(ObjCacher.hasLastPassword())
-			codeLayout.setBackgroundResource(R.drawable.green_color);
-		else
-			codeLayout.setBackgroundResource(R.drawable.red_color);
-		if(ObjCacher.hasLastFaceBitmap())
-			faceRecLayout.setBackgroundResource(R.drawable.green_color);
-		else
-			faceRecLayout.setBackgroundResource(R.drawable.red_color);
-		if(ObjCacher.hasLastQRCreated() || ObjCacher.hasLastQRScanned())
-			qrCodeLayout.setBackgroundResource(R.drawable.green_color);
-		else
-			qrCodeLayout.setBackgroundResource(R.drawable.red_color);
-	}
+	protected abstract void setLayoutColors();
 }

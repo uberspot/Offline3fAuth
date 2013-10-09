@@ -28,7 +28,6 @@ public class RegisterFragment extends TabFragment {
 			Bundle savedInstanceState) {
 		View superView = super.onCreateView(inflater, container, savedInstanceState);
 		
-		// Do whatever change to the UI you want
 		qrCodeButton.setVisibility(View.GONE);
 		
 		return superView;
@@ -38,7 +37,7 @@ public class RegisterFragment extends TabFragment {
 		  if(requestCode == CAMREQ_CODE && resultCode == Activity.RESULT_OK) {
 				Bundle extras = intent.getExtras();
 				Bitmap picture = (Bitmap) extras.get("data");
-				ObjCacher.lastFaceBitmap = picture;
+				ObjCacher.lastFaceBitmapReg = picture;
 				faceRecView.setImageBitmap(picture);
 				validateAllFactors();
 		  }
@@ -47,14 +46,14 @@ public class RegisterFragment extends TabFragment {
 	@Override
 	protected boolean validateAllFactors() {
 		setLayoutColors();
-		if(!ObjCacher.hasLastFaceBitmap() || !ObjCacher.hasLastPassword())
+		if(!ObjCacher.hasLastFaceBitmapReg() || !ObjCacher.hasLastPasswordReg())
 			return false;
 		// Else process ObjCacher.lastFaceBitmap , ObjCacher.lastQRScanned and ObjCacher.lastPassword
 		// and do something with the result
 		
 		//Generate QRCode and add button to save it
 		
-		String compressed = generateQRCodeText(ObjCacher.lastFaceBitmap, ObjCacher.lastPassword);
+		String compressed = generateQRCodeText(ObjCacher.lastFaceBitmapReg, ObjCacher.lastPasswordReg);
 		Bitmap qrBitmap = null;
 		try {
 			if(compressed.length()!=0)
@@ -74,6 +73,7 @@ public class RegisterFragment extends TabFragment {
             	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.US);
             	String qrName = dateFormat.format(new Date());
             	saveQRCode("/offline3fauth", qrName);
+            	setLayoutColors();
             }
         }); 
 		return true;
@@ -94,5 +94,40 @@ public class RegisterFragment extends TabFragment {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	protected void setLayoutColors() {
+		if(ObjCacher.hasLastPasswordReg())
+			codeLayout.setBackgroundResource(R.drawable.green_color);
+		else
+			codeLayout.setBackgroundResource(R.drawable.red_color);
+		if(ObjCacher.hasLastFaceBitmapReg())
+			faceRecLayout.setBackgroundResource(R.drawable.green_color);
+		else
+			faceRecLayout.setBackgroundResource(R.drawable.red_color);
+		if(ObjCacher.hasLastQRCreated())
+			qrCodeLayout.setBackgroundResource(R.drawable.green_color);
+		else
+			qrCodeLayout.setBackgroundResource(R.drawable.red_color);
+	}
+
+	@Override
+	protected void displayAcceptedInputs() {
+		if(ObjCacher.hasLastFaceBitmapReg()) {
+			faceRecView.setImageBitmap(ObjCacher.lastFaceBitmapReg);
+		}
+		if(ObjCacher.hasLastPasswordReg()) {
+			codeInput.setText(ObjCacher.lastPasswordReg);
+			codeInputValidate.setText(ObjCacher.lastPasswordReg);
+		}
+		if(ObjCacher.hasLastQRCreated()) {
+			qrCodeView.setImageBitmap(ObjCacher.lastQRCreated);
+		}
+	}
+
+	@Override
+	protected void setPassword(String codeIn) {
+		ObjCacher.lastPasswordReg = codeIn;
 	}
 }

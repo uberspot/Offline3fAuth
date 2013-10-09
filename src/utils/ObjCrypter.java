@@ -2,11 +2,16 @@ package utils;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SealedObject;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -103,8 +108,10 @@ public class ObjCrypter {
 		return text;
 	}
 
-	public static byte[] encrypt3DES(byte[] message, String password) {
-		try {
+	public static byte[] encrypt3DES(byte[] message, String password) 
+				throws NoSuchAlgorithmException, UnsupportedEncodingException, 
+				NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, 
+				IllegalBlockSizeException, BadPaddingException {
 	    	final byte[] digestOfPassword = MessageDigest.getInstance("md5")
 	    									.digest(password.getBytes("ISO-8859-1"));//"utf-8"
 	    	final byte[] keyBytes = Arrays.copyOf(digestOfPassword, 24);
@@ -117,12 +124,12 @@ public class ObjCrypter {
 	    	cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(new byte[8]));
 
 	    	return cipher.doFinal(message);
-		} catch(Exception e) { e.printStackTrace(); }
-		return null;
     }
 
-    public static byte[] decrypt3DES(byte[] message, String password) {
-    	try {
+    public static byte[] decrypt3DES(byte[] message, String password) 
+    			throws NoSuchAlgorithmException, UnsupportedEncodingException, 
+    				InvalidKeyException, InvalidAlgorithmParameterException, 
+    				NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 	    	final byte[] digestOfPassword = MessageDigest.getInstance("md5")
 	    										.digest(password.getBytes("ISO-8859-1")); //"utf-8"
 	    	final byte[] keyBytes = Arrays.copyOf(digestOfPassword, 24);
@@ -135,7 +142,5 @@ public class ObjCrypter {
 	    	decipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(new byte[8]));
 	
 	    	return decipher.doFinal(message);
-    	} catch(Exception e) { e.printStackTrace(); }
-		return null;
     }
 }
