@@ -22,7 +22,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -39,6 +41,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -48,6 +51,7 @@ public abstract class TabFragment extends Fragment {
 	protected ImageView faceRecView, qrCodeView;
 	protected EditText codeInput, codeInputValidate;
 	protected final static int CAMREQ_CODE = 12221;
+	protected LinearLayout codeLayout, faceRecLayout, qrCodeLayout;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +65,9 @@ public abstract class TabFragment extends Fragment {
 		qrCodeView = (ImageView) rootView.findViewById(R.id.qrCodeView);
 		codeInput = (EditText) rootView.findViewById(R.id.codeInput);
 		codeInputValidate = (EditText) rootView.findViewById(R.id.codeInputValidate);
+		codeLayout = (LinearLayout)rootView.findViewById(R.id.codeLayout);
+		faceRecLayout = (LinearLayout)rootView.findViewById(R.id.faceRecLayout);
+		qrCodeLayout = (LinearLayout)rootView.findViewById(R.id.qrCodeLayout);
 		
 		faceRecButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -245,5 +252,27 @@ public abstract class TabFragment extends Fragment {
 				try { output.close(); } catch (IOException e) { }
 		}
 		return false;
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+	    super.onConfigurationChanged(newConfig);
+
+	    setLayoutColors();
+	}
+	
+	protected void setLayoutColors() {
+		if(ObjCacher.hasLastPassword())
+			codeLayout.setBackgroundResource(R.drawable.green_color);
+		else
+			codeLayout.setBackgroundResource(R.drawable.red_color);
+		if(ObjCacher.hasLastFaceBitmap())
+			faceRecLayout.setBackgroundResource(R.drawable.green_color);
+		else
+			faceRecLayout.setBackgroundResource(R.drawable.red_color);
+		if(ObjCacher.hasLastQRCreated() || ObjCacher.hasLastQRScanned())
+			qrCodeLayout.setBackgroundResource(R.drawable.green_color);
+		else
+			qrCodeLayout.setBackgroundResource(R.drawable.red_color);
 	}
 }

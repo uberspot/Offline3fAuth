@@ -46,6 +46,7 @@ public class RegisterFragment extends TabFragment {
 
 	@Override
 	protected boolean validateAllFactors() {
+		setLayoutColors();
 		if(!ObjCacher.hasLastFaceBitmap() || !ObjCacher.hasLastPassword())
 			return false;
 		// Else process ObjCacher.lastFaceBitmap , ObjCacher.lastQRScanned and ObjCacher.lastPassword

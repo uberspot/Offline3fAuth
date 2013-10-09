@@ -15,7 +15,9 @@
         android:ems="10"
         android:gravity="left"
         android:orientation="vertical"
-        android:padding="7dp" >
+        android:background="@drawable/red_color"
+        android:layout_margin="3dp"
+        android:padding="3dp" >
          <TextView
 	        android:id="@+id/faceRecTextView"
 	        style="?android:attr/textAppearanceMedium"
@@ -47,7 +49,9 @@
         android:layout_weight="1"
         android:ems="10"
         android:orientation="vertical"
-        android:padding="7dp" >
+        android:background="@drawable/red_color"
+        android:layout_margin="3dp"
+        android:padding="3dp" >
          <TextView
 	        android:id="@+id/codeTextView"
 	        style="?android:attr/textAppearanceMedium"
@@ -84,7 +88,9 @@
         android:ems="10"
         android:gravity="right"
         android:orientation="vertical"
-        android:padding="7dp" >
+        android:background="@drawable/red_color"
+        android:layout_margin="3dp"
+        android:padding="3dp" >
          <TextView
 	        android:id="@+id/qrCodeTextView"
 	        style="?android:attr/textAppearanceMedium"

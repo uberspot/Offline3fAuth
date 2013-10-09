@@ -11,10 +11,12 @@ import com.google.zxing.integration.android.IntentResult;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class AuthFragment extends TabFragment {
 	
@@ -49,6 +51,7 @@ public class AuthFragment extends TabFragment {
 
 	@Override
 	protected boolean validateAllFactors() {
+		setLayoutColors();
 		if (!ObjCacher.hasLastFaceBitmap() || !ObjCacher.hasLastPassword()
 				|| !ObjCacher.hasLastQRScanned())
 			return false;
@@ -63,7 +66,11 @@ public class AuthFragment extends TabFragment {
 		Double distance = LocalBinaryPattern.distance(LocalBinaryPattern.ArrayListToCollection(scannedFaceDes),
 													  LocalBinaryPattern.ArrayListToCollection(faceDes));
 		System.out.println("Distance: " + distance);
-		
+		// 1.0 is arbitrary for now
+		if(distance<1.0)
+			Toast.makeText(getActivity(), "User authenticated. Distance: " + distance, Toast.LENGTH_SHORT).show();
+		else
+			Toast.makeText(getActivity(), "User not authenticated. Distance " + distance, Toast.LENGTH_SHORT).show();
 		return true;
 	}
 }
