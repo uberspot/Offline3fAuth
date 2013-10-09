@@ -24,11 +24,11 @@ public class ObjCacher {
 	}
 	
 	public static boolean hasLastFaceBitmapReg() {
-		return lastFaceBitmapAuth !=null;
+		return lastFaceBitmapReg !=null;
 	}
 	
 	public static boolean hasLastPasswordReg() {
-		return lastPasswordAuth!=null;
+		return lastPasswordReg!=null;
 	}
 
 	public static boolean hasLastQRCreated() {
