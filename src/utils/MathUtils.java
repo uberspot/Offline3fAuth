@@ -16,7 +16,6 @@ public class MathUtils {
 	 * @param i2 Second sample.
 	 * @return Return the Chi-Square sample between samples.
 	 */
-	//chi-square distance between samples
 	public static double chiSquareDistance(Collection<Double> i1, Collection<Double> i2){
 		
 		double dist = 0.0;

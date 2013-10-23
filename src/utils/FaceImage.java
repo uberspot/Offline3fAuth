@@ -73,6 +73,7 @@ public class FaceImage {
 		matrix.postScale((float)scaleWidth, (float)scaleHeight);
 	
 		Log.v("Scale","Matrix ready");
+		
 		// recreate the new Bitmap
 		Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
 		
@@ -107,21 +108,16 @@ public class FaceImage {
 	 * @param b Image to be saved.
 	 * @param file File to store image.
 	 */
-	public static void saveImage(Bitmap bitmap, File file) {
-		// TODO Auto-generated method stub
-		
+	public static void saveImage(Bitmap bitmap, File file) {		
 		if(file.exists()){
 			try {
 				file.delete();
 				file.createNewFile();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
-		
-		//uma saga epica para apenas salvar a imagem apos marcar a face
 			try {
 				FileOutputStream fout = new FileOutputStream(file);
 		    	bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fout);
@@ -129,10 +125,8 @@ public class FaceImage {
 				fout.close();
 		    	
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}

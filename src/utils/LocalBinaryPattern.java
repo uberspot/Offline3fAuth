@@ -58,7 +58,7 @@ public class LocalBinaryPattern {
 	 * @param detect Face detector used.
 	 */
 	public LocalBinaryPattern(FaceDetect detect) {
-		initialize(1.0, 1.0);// a janela possui o tamanho da imagem
+		initialize(1.0, 1.0);
 	}
 
 	/** Get the (x,y) pixel in the image array.

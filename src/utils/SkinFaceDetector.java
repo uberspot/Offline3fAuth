@@ -60,8 +60,6 @@ public class SkinFaceDetector implements FaceDetect {
     	width = (int)Math.ceil(2.0*eyesDistance);
     	height = (int)Math.ceil(3.0f*eyesDistance);
     	
-    	
-    	//verifica se o retangulo da face nao estah definido fora da imagem
     	if(x < 0)
     		x = 0;
     	if(y < 0)
@@ -106,19 +104,16 @@ public class SkinFaceDetector implements FaceDetect {
 	
 	@Override
 	public double timeElapsed() {
-		// TODO Auto-generated method stub
 		return ((double)time)/1000;
 	}
 
 	@Override
 	public int normalSize() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public Bitmap normalizeSize(Bitmap b) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

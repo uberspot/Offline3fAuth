@@ -5,6 +5,7 @@
 !libs/
 !LICENSE
 !.gitignore
+!flow.png
 !ic_launcher-web.png
 !assets/
 !AndroidManifest.xml

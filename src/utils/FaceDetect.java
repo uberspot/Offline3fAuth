@@ -21,9 +21,9 @@ public interface FaceDetect {
 	
 	/**
 	 * Time elapsed in face detection.
-	 * @return Return the time spent in face detection.
+	 * @return Return the time spent in last face detection.
 	 */
-	public double timeElapsed();//return the time elapsed in the last face detection
+	public double timeElapsed();
 	
 	public int normalSize();
 	public Bitmap normalizeSize(Bitmap b);
